@@ -1,0 +1,47 @@
+syntax = "proto3";
+package com.gprc;
+option java_multiple_files = true;
+
+message  Book {
+  int32 book_id = 1;
+  string  title = 2;
+  float  price = 3;
+  int32 pages =4;
+  int32 author_id =5;
+}
+
+
+message Author {
+  int32 author_id =1;
+  string first_name =2;
+  string last_name =3;
+  string gender = 4;
+  int32 book_id =5;
+}
+//defining service
+service BookAuthorService {
+  // unary (synchronous) => one request from client and server will respond one response
+  rpc getAuthor(Author) returns (Author) {}
+
+  // server-streaming - asynchronous
+
+}
+
+//message Container {
+//  Machine machine =1;
+//  List<Event> events =2;
+//  Snapshot snap = 3;
+//}
+//
+//message Machine {
+//  int32 uuid=1;
+//  string ip_address=2;
+//}
+//
+//message  Event {
+//  int32 processId =1;
+//  int32 parentProcessId =2;
+//}
+//message Snapshot {
+//  int32  dummy=1;
+//}
