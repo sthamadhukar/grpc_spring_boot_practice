@@ -1,61 +1,75 @@
 syntax = "proto3";
-package com.sysdig;
+package com.uco.telscope.sysdig;
 option java_multiple_files = true;
 
 message  Event {
-  string datetime=1;
-  string type=2;
-  int32 type_int=3;
-  string thread_tid=4;
-  string proc_name=5;
-  string proc_args=6;
-  string proc_cwd=7;
-  string proc_cmdline=8;
-  string proc_pname=9;
-  string proc_pid=10;
-  string proc_ppid=11;
-  string fd_cip=12;
-  string fd_cport=13;
-  string fd_directory=14;
-  string fd_filename=15;
-  string fd_name=16;
-  string fd_num=17;
-  string fd_sip=18;
-  string fd_sockfamily=19;
-  string fd_sport=20;
-  string fd_type=21;
-  string fd_typechar=22;
-  string user_name=23;
-  string user_uid=24;
-  string evt_num=25;
-  string user_shell=26;
-  string evt_dir=27;
-  int32 order=28;
-  string container_name=29;
-  bool is_io_write=30;
-  string evt_fail=31;
-  string evt_args=32;
-  string buffer=33;
-  bool log=34;
+  int32 datetime = 1; // epoch date
+  string type = 2;
+  int32 type_int = 3;
+  string thread_tid = 4;
+  string proc_name = 5;
+  string proc_args = 6;
+  string proc_cwd = 7;
+  string proc_cmdline = 8;
+  string proc_pname = 9;
+  string proc_pid = 10;
+  string proc_ppid = 11;
+  string fd_cip = 12;
+  string fd_cport = 13;
+  string fd_directory = 14;
+  string fd_filename = 15;
+  string fd_name = 16;
+  int32 fd_num = 17;
+  string fd_sip = 18;
+  string fd_sockfamily = 19;
+  string fd_sport = 20;
+  string fd_type = 21;
+  string fd_typechar = 22;
+  string user_name = 23;
+  string user_uid = 24;
+  int32 evt_num = 25;
+  string user_shell = 26;
+  string evt_dir = 27;
+  int32 order = 28;
+  string container_name = 29;
+  bool is_io_write = 30;
+  string evt_fail = 31;
+  string evt_args = 32;
+  string buffer = 33;
+  bool log = 34;
+  string log_message = 35;
+  int32 timezone = 36; // using integer value of gmt +/-
+
+}
+
+message  DNSName{
+  string server_name = 1;
+  optional  string alias = 2;
 }
 
 message Machine {
- int32 uuid=1;
- string ip_address=2;
+  string uuid = 1;
+  string ip_address = 2;
+  repeated DNSName dns_name = 3;
 }
 
 message Snapshot {
- int32  dummy=1;
+  int32  dummy = 1;
+  int32 date_time = 2; //snapshot taken date/time epoch format
 }
 
 message Container {
-  Machine machine =1;
-  repeated Event events =2;
-  Snapshot snap = 3;
+  Machine machine = 1;
+  // https://stackoverflow.com/questions/25637687/optional-repeated-with-google-protobuf-for-java
+  // A repeated field is inherently optional: you just don't add any values.
+  repeated Event events = 2;
+  repeated Snapshot snap = 3;
 }
 service SysdigDataService {
- // unary (synchronous) => one request from client and server will respond one response
- rpc getSysdigData(Container) returns (Container) {}
+  // unary (synchronous) => one request from client and server will respond one response
+  rpc getSysdigData(Container) returns (Container) {}
+
+  rpc addSysdigData(Container) returns (Container){}
 }
 
 
